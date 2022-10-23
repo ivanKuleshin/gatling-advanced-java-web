@@ -10,6 +10,10 @@ import static io.gatling.javaapi.core.CoreDsl.doIf;
 import static io.gatling.javaapi.core.CoreDsl.exec;
 import static io.gatling.javaapi.core.CoreDsl.substring;
 import static io.gatling.javaapi.http.HttpDsl.http;
+import static acetoys.session.UserSession.increaseItemsInBasketForSession;
+import static acetoys.session.UserSession.increaseSessionBasketTotal;
+import static io.gatling.javaapi.core.CoreDsl.*;
+import static io.gatling.javaapi.http.HttpDsl.*;
 
 public class Cart {
 
@@ -23,9 +27,12 @@ public class Cart {
                     );
 
     public static ChainBuilder increaseQuantityInCart =
-            exec(
-                    http("Increase Product Quantity in Cart - Product Id: 19")
-                            .get("/cart/add/19?cartPage=true")
+            exec(increaseItemsInBasketForSession)
+            .exec(increaseSessionBasketTotal)
+                    .exec(
+                    http("Increase Product Quantity in Cart - Product Name: #{name}")
+                            .get("/cart/add/#{id}?cartPage=true")
+                            .check(css("#grandTotal").isEL("$#{basketTotal}"))
             );
 
     public static ChainBuilder decreaseQuantityInCart =
