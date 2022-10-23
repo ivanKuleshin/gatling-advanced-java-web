@@ -18,6 +18,13 @@ public final class UserSession {
             exec(flushCookieJar())
                     .exec(session -> session.set(SessionKeys.CUSTOMER_LOGGED_IN.getKey(), false));
 
+    public static ChainBuilder increaseItemsInBasketForSession =
+            exec(session -> {
+                int itemsInBasket = session.getInt("itemsInBasket");
+                return session.set("itemsInBasket", (itemsInBasket + 1));
+            });
+//    .exec(session -> session.set("itemsInBasket", 0));
+
     public static boolean isCustomerLoggedIn(Session session) {
         validateSessionAndKey(session, SessionKeys.CUSTOMER_LOGGED_IN.getKey());
         return session.getBoolean(SessionKeys.CUSTOMER_LOGGED_IN.getKey());
@@ -53,4 +60,5 @@ public final class UserSession {
             throw new RuntimeException("Session does not contain '" + key + "' key");
         }
     }
+                    .exec(session -> session.set("customerLoggedIn", false));
 }
