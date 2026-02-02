@@ -38,12 +38,15 @@ public class Customer {
     )
                     .exec(session -> session.set("customerLoggedIn", true));
 
+    // new Gatling 3.11 and above
     public static ChainBuilder logout =
             randomSwitch().on(
-                    Choice.withWeight(10, exec(
+                    percent(10).then(exec(
                             http("Logout")
                                     .post("/logout")
                                     .formParam("_csrf", "#{csrfTokenLoggedIn}")
                                     .check(css("#LoginLink").is("Login"))
-                    )));
+                    )),
+                    percent(90).then(exec(pause(0)))
+            );
 }
