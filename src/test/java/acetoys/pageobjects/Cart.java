@@ -2,19 +2,23 @@ package acetoys.pageobjects;
 
 import io.gatling.javaapi.core.ChainBuilder;
 
-import static io.gatling.javaapi.core.CoreDsl.*;
-import static io.gatling.javaapi.http.HttpDsl.*;
+import static acetoys.session.UserSession.isCustomerLoggedIn;
+import static io.gatling.javaapi.core.CoreDsl.css;
+import static io.gatling.javaapi.core.CoreDsl.doIf;
+import static io.gatling.javaapi.core.CoreDsl.exec;
+import static io.gatling.javaapi.core.CoreDsl.substring;
+import static io.gatling.javaapi.http.HttpDsl.http;
 
 public class Cart {
 
     public static ChainBuilder viewCart =
-            doIf(session -> !session.getBoolean("customerLoggedIn"))
+            doIf(session -> !isCustomerLoggedIn(session))
                     .then(exec(Customer.login))
                     .exec(
-                    http("View Cart")
-                            .get("/cart/view")
-                            .check(css("#CategoryHeader").is("Cart Overview"))
-            );
+                            http("View Cart")
+                                    .get("/cart/view")
+                                    .check(css("#CategoryHeader").is("Cart Overview"))
+                    );
 
     public static ChainBuilder increaseQuantityInCart =
             exec(
