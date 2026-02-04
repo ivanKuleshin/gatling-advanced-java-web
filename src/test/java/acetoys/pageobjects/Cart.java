@@ -2,7 +2,9 @@ package acetoys.pageobjects;
 
 import io.gatling.javaapi.core.ChainBuilder;
 
+import static acetoys.session.UserSession.buildSessionKey;
 import static acetoys.session.UserSession.isCustomerLoggedIn;
+import static enums.SessionKeys.ITEMS_IN_CART;
 import static io.gatling.javaapi.core.CoreDsl.css;
 import static io.gatling.javaapi.core.CoreDsl.doIf;
 import static io.gatling.javaapi.core.CoreDsl.exec;
@@ -38,4 +40,19 @@ public class Cart {
                             .get("/cart/checkout")
                             .check(substring("Your products are on their way to you now!!"))
             );
+
+    public static final ChainBuilder addProductToCart =
+            exec(increaseItemsInBasketForSession())
+                    .exec(
+                            http("Add Product to Cart - Product Name: #{name}")
+                                    .get("/cart/add/#{id}")
+                                    .check(substring("You have <span>" + buildSessionKey(ITEMS_IN_CART.getKey()) + "</span> products in your Basket"))
+                    );
+
+    private static ChainBuilder increaseItemsInBasketForSession() {
+        return exec(session -> {
+            int itemsInCart = session.getInt(ITEMS_IN_CART.getKey());
+            return session.set(ITEMS_IN_CART.getKey(), (itemsInCart + 1));
+        });
+    }
 }

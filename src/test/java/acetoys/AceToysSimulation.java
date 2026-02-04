@@ -16,17 +16,18 @@ import static io.gatling.javaapi.core.CoreDsl.atOnceUsers;
 import static io.gatling.javaapi.core.CoreDsl.scenario;
 import static io.gatling.javaapi.http.HttpDsl.http;
 
+@SuppressWarnings("unused")
 public class AceToysSimulation extends Simulation {
 
     private static final String DOMAIN = "acetoys.uk";
 
-    private HttpProtocolBuilder httpProtocol = http
+    private static final HttpProtocolBuilder httpProtocol = http
             .baseUrl("https://" + DOMAIN)
             .inferHtmlResources(AllowList(), DenyList(".*\\.js", ".*\\.css", ".*\\.gif", ".*\\.jpeg", ".*\\.jpg", ".*\\.ico", ".*\\.woff", ".*\\.woff2", ".*\\.(t|o)tf", ".*\\.png", ".*detectportal\\.firefox\\.com.*"))
             .acceptEncodingHeader("gzip, deflate")
             .acceptLanguageHeader("en-GB,en;q=0.9");
 
-    private ScenarioBuilder scn = scenario("AceToysSimulation")
+    private static final ScenarioBuilder scn = scenario("AceToysSimulation")
             .exec(UserSession.initSession)
             .exec(StaticPages.homepage)
             .pause(2)
@@ -40,11 +41,11 @@ public class AceToysSimulation extends Simulation {
             .pause(2)
             .exec(Product.loadProductDetailsPage)
             .pause(2)
-            .exec(Product.addProductToCart)
+            .exec(Cart.addProductToCart)
             .pause(2)
             .exec(Category.productListByCategory)
             .pause(2)
-            .exec(Product.addProductToCart)
+            .exec(Cart.addProductToCart)
             .pause(2)
             .exec(Cart.viewCart)
             .pause(2)

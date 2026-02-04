@@ -4,6 +4,7 @@ import enums.SessionKeys;
 import io.gatling.javaapi.core.ChainBuilder;
 import io.gatling.javaapi.core.Session;
 
+import static enums.SessionKeys.ITEMS_IN_CART;
 import static io.gatling.javaapi.core.CoreDsl.exec;
 import static io.gatling.javaapi.http.HttpDsl.flushCookieJar;
 
@@ -16,14 +17,8 @@ public final class UserSession {
     // default session initialization
     public static ChainBuilder initSession =
             exec(flushCookieJar())
-                    .exec(session -> session.set(SessionKeys.CUSTOMER_LOGGED_IN.getKey(), false));
-
-    public static ChainBuilder increaseItemsInBasketForSession =
-            exec(session -> {
-                int itemsInBasket = session.getInt("itemsInBasket");
-                return session.set("itemsInBasket", (itemsInBasket + 1));
-            });
-//    .exec(session -> session.set("itemsInBasket", 0));
+                    .exec(session -> session.set(SessionKeys.CUSTOMER_LOGGED_IN.getKey(), false))
+                    .exec(session -> session.set(ITEMS_IN_CART.getKey(), 0));
 
     public static boolean isCustomerLoggedIn(Session session) {
         validateSessionAndKey(session, SessionKeys.CUSTOMER_LOGGED_IN.getKey());
@@ -60,5 +55,4 @@ public final class UserSession {
             throw new RuntimeException("Session does not contain '" + key + "' key");
         }
     }
-                    .exec(session -> session.set("customerLoggedIn", false));
 }
