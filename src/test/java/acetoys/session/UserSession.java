@@ -4,7 +4,8 @@ import enums.SessionKeys;
 import io.gatling.javaapi.core.ChainBuilder;
 import io.gatling.javaapi.core.Session;
 
-import static enums.SessionKeys.ITEMS_IN_CART;
+import static enums.SessionKeys.CART_TOTAL_PRICE;
+import static enums.SessionKeys.ITEMS_COUNT_IN_CART;
 import static io.gatling.javaapi.core.CoreDsl.exec;
 import static io.gatling.javaapi.http.HttpDsl.flushCookieJar;
 
@@ -18,7 +19,8 @@ public final class UserSession {
     public static ChainBuilder initSession =
             exec(flushCookieJar())
                     .exec(session -> session.set(SessionKeys.CUSTOMER_LOGGED_IN.getKey(), false))
-                    .exec(session -> session.set(ITEMS_IN_CART.getKey(), 0));
+                    .exec(session -> session.set(ITEMS_COUNT_IN_CART.getKey(), 0))
+                    .exec(session -> session.set(CART_TOTAL_PRICE.getKey(), 0.00));
 
     public static boolean isCustomerLoggedIn(Session session) {
         validateSessionAndKey(session, SessionKeys.CUSTOMER_LOGGED_IN.getKey());

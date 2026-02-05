@@ -7,7 +7,8 @@ public enum SessionKeys {
     CURRENT_PAGE_NUMBER("currentPageNumber"),
     EXPECTED_PAGE_NUMBER("expectedPageNumber"),
     MORE_PAGES("morePages"),
-    ITEMS_IN_CART("itemsInCart");
+    ITEMS_COUNT_IN_CART("itemsInCart"),
+    CART_TOTAL_PRICE("cartTotal");
 
     private final String key;
 

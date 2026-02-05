@@ -2,8 +2,12 @@ package enums;
 
 public enum FeederKeys {
 
+    // CSV
     CATEGORY_NAME("categoryName"),
-    CATEGORY_SLUG("categorySlug");
+    CATEGORY_SLUG("categorySlug"),
+
+    // JSON
+    ITEM_PRICE("price");
 
     private final String key;
 

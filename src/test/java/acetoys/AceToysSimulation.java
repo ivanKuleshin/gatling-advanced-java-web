@@ -6,6 +6,7 @@ import acetoys.pageobjects.Customer;
 import acetoys.pageobjects.Product;
 import acetoys.pageobjects.StaticPages;
 import acetoys.session.UserSession;
+import annotation.GatlingSimulation;
 import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.core.Simulation;
 import io.gatling.javaapi.http.HttpProtocolBuilder;
@@ -16,7 +17,7 @@ import static io.gatling.javaapi.core.CoreDsl.atOnceUsers;
 import static io.gatling.javaapi.core.CoreDsl.scenario;
 import static io.gatling.javaapi.http.HttpDsl.http;
 
-@SuppressWarnings("unused")
+@GatlingSimulation
 public class AceToysSimulation extends Simulation {
 
     private static final String DOMAIN = "acetoys.uk";
@@ -35,10 +36,12 @@ public class AceToysSimulation extends Simulation {
             .pause(2)
             .exec(StaticPages.getInTouch)
             .pause(2)
+            // CSV is loaded
             .exec(Category.productListByCategory)
             .pause(2)
             .exec(Category.cyclePagesOfProducts)
             .pause(2)
+            // JSON is loaded
             .exec(Product.loadProductDetailsPage)
             .pause(2)
             .exec(Cart.addProductToCart)
@@ -61,7 +64,7 @@ public class AceToysSimulation extends Simulation {
             .pause(2)
             .exec(Customer.logout);
 
-    {
+    public AceToysSimulation() {
         setUp(scn.injectOpen(atOnceUsers(1))).protocols(httpProtocol);
     }
 }
