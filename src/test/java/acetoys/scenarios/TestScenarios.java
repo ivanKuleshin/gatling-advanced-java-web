@@ -1,6 +1,7 @@
 package acetoys.scenarios;
 
 import acetoys.actions.MainActions;
+import acetoys.utils.PropertyUtils;
 import io.gatling.javaapi.core.CoreDsl;
 import io.gatling.javaapi.core.ScenarioBuilder;
 
@@ -13,7 +14,7 @@ import static io.gatling.javaapi.core.CoreDsl.scenario;
 
 public class TestScenarios {
 
-    private static final Duration TEST_DURATION = Duration.ofSeconds(Integer.parseInt(System.getProperty("TEST_DURATION", "30")));
+    private static final Duration TEST_DURATION = Duration.ofSeconds(PropertyUtils.getIntProperty("TEST_DURATION", 30));
 
     public final static ScenarioBuilder defaultLoadScenario =
             scenario("Default Load Scenario")

@@ -1,6 +1,7 @@
 package acetoys.populations;
 
 import acetoys.scenarios.TestScenarios;
+import acetoys.utils.PropertyUtils;
 import io.gatling.javaapi.core.PopulationBuilder;
 
 import java.time.Duration;
@@ -13,8 +14,8 @@ import static io.gatling.javaapi.core.CoreDsl.rampUsersPerSec;
 
 public class OpenPopulations {
 
-    private static final int USER_COUNT = Integer.parseInt(System.getProperty("USER_COUNT", "10"));
-    private static final Duration RAMP_DURATION = Duration.ofSeconds(Integer.parseInt(System.getProperty("RAMP_DURATION", "20")));
+    private static final int USER_COUNT = PropertyUtils.getIntProperty("USER_COUNT", 10);
+    private static final Duration RAMP_DURATION = Duration.ofSeconds(PropertyUtils.getIntProperty("RAMP_DURATION", 20));
 
     public static PopulationBuilder instantUsersPopulation =
             TestScenarios.defaultLoadScenario.injectOpen(
