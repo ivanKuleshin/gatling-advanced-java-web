@@ -6,7 +6,6 @@ import annotation.GatlingSimulation;
 import io.gatling.javaapi.core.Simulation;
 import io.gatling.javaapi.http.HttpProtocolBuilder;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -48,7 +47,7 @@ public class AceToysMainSimulation extends Simulation {
      * <li>"TEST_DURATION": Test duration in seconds (default: 30, must be positive)</li>
      * </ul>
      * <p>
-     * For better readability all scenarios are defined in TestScenarios and populations in OpenPopulations/ClosedPopulations
+     * For better readability, all scenarios are defined in TestScenarios and populations in OpenPopulations/ClosedPopulations
      * 
      * @throws IllegalArgumentException if any numeric property is invalid
      * @throws IllegalStateException if required resource files are missing
@@ -102,7 +101,8 @@ public class AceToysMainSimulation extends Simulation {
     
     /**
      * Validates that a required resource file exists.
-     * Checks both in the resources directory and relative to the classpath.
+     * First checks the classpath (as Gatling will access it), then checks the file system
+     * to provide a more detailed error message if the resource is not found.
      * 
      * @param resourcePath the path to the resource file (relative to resources directory)
      * @throws IllegalStateException if the resource file does not exist
