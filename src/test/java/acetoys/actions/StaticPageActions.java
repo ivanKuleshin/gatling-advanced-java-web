@@ -1,13 +1,13 @@
-package acetoys.pageobjects;
+package acetoys.actions;
 
 import io.gatling.javaapi.core.ChainBuilder;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
 
-public class StaticPages {
+public class StaticPageActions {
 
-    public static ChainBuilder homepage =
+    public static ChainBuilder openHomePageAction =
             exec(
                     http("Load Home Page")
                             .get("/")
@@ -17,14 +17,14 @@ public class StaticPages {
                             .check(css("#_csrf", "content").saveAs("csrfToken"))
             );
 
-    public static ChainBuilder ourStory =
+    public static ChainBuilder openOurStoryPageAction =
             exec(
                     http("Load Our Story Page")
                             .get("/our-story")
                             .check(regex("was founded online in \\d{4}"))
             );
 
-    public static ChainBuilder getInTouch =
+    public static ChainBuilder openGetInTouchPageAction =
             exec(
                     http("Load Get In Touch")
                             .get("/get-in-touch")

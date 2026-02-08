@@ -4,7 +4,7 @@ public class Engine {
 
     public static void main(String[] args) {
         String[] gatlingArgs = {
-                "--simulation", "acetoys.AceToysSimulation",
+                "--simulation", "acetoys.AceToysMainSimulation",
                 "--results-folder", IDEPathHelper.resultsDirectory.toString()
         };
         Gatling.main(gatlingArgs);

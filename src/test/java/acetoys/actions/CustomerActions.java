@@ -1,4 +1,4 @@
-package acetoys.pageobjects;
+package acetoys.actions;
 
 import io.gatling.javaapi.core.ChainBuilder;
 
@@ -18,7 +18,7 @@ import static io.gatling.javaapi.core.CoreDsl.percent;
 import static io.gatling.javaapi.core.CoreDsl.randomSwitch;
 import static io.gatling.javaapi.http.HttpDsl.http;
 
-public class Customer {
+public class CustomerActions {
 
     private static final Iterator<Map<String, Object>> loginFeeder =
             Stream.generate((Supplier<Map<String, Object>>) () -> {
@@ -31,7 +31,7 @@ public class Customer {
                 return hmap;
             }).iterator();
 
-    public static ChainBuilder login =
+    public static ChainBuilder loginAction =
             feed(loginFeeder)
                     .exec(
                             http("Login User")
@@ -44,7 +44,7 @@ public class Customer {
                     .exec(session -> setCustomerLoggedIn(session, true));
 
     // new Gatling 3.11 and above
-    public static ChainBuilder logout =
+    public static ChainBuilder logoutWithProbabilityAction =
             randomSwitch().on(
                     percent(10).then(exec(
                             http("Logout")
