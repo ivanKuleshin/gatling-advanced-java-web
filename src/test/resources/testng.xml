@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="TestNgSuite" verbose="1">
+  <test name="AllTests">
+    <classes>
+      <class name="testNg.XrayTest"/>
+      <class name="testNg.XrayAnotherTest"/>
+      <class name="testNg.XrayAnotherRandomTest"/>
+    </classes>
+  </test>
+</suite>

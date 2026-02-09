@@ -1,0 +1,12 @@
+{
+  "fields": {
+    "summary": "Automation Test Execution",
+    "description": "This is a test execution created by automation",
+    "issuetype": {
+      "name": "Test Execution"
+    },
+    "project": {
+      "key": "XSP"
+    }
+  }
+}

@@ -14,6 +14,12 @@
         <gatling-maven-plugin.version>4.2.7</gatling-maven-plugin.version>
         <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
         <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
+        <xray-maven-plugin.version>0.10.0</xray-maven-plugin.version>
+        <testng.results.file>target/surefire-reports/testng-results.xml</testng.results.file>
+        <!--suppress UnresolvedMavenProperty -->
+        <xray.clientId>${env.XRAY_CLIENT_ID}</xray.clientId>
+        <!--suppress UnresolvedMavenProperty -->
+        <xray.clientSecret>${env.XRAY_CLIENT_SECRET}</xray.clientSecret>
     </properties>
 
     <dependencies>
@@ -40,7 +46,12 @@
             <artifactId>netty-all</artifactId>
             <version>4.2.9.Final</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.10.2</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
@@ -59,6 +70,70 @@
                 <artifactId>gatling-maven-plugin</artifactId>
                 <version>${gatling-maven-plugin.version}</version>
             </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <testFailureIgnore>true</testFailureIgnore>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>app.getxray</groupId>
+                <artifactId>xray-maven-plugin</artifactId>
+                <version>${xray-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>import-results</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <cloud>true</cloud>
+                    <clientId>${xray.clientId}</clientId>
+                    <clientSecret>${xray.clientSecret}</clientSecret>
+                    <projectKey>XSP</projectKey>
+                    <reportFormat>testng</reportFormat>
+                    <reportFile>${testng.results.file}</reportFile>
+                    <testExecKey>XSP-86</testExecKey>
+<!--                    <testExecInfoJson>xray-test-execution.json</testExecInfoJson>-->
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.gmaven</groupId>
+                <artifactId>groovy-maven-plugin</artifactId>
+                <version>2.1.1</version>
+                <executions>
+                    <execution>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <source>
+                        def resultsFile = '${testng.results.file}'
+                        println "Checking TestNG results for failures in ${resultsFile}..."
+                        def xml = new XmlSlurper().parse(new File(resultsFile))
+                        def failed = xml.@failed.toInteger()
+                        println "Number of failed tests: ${failed}"
+                        if (failed > 0) {
+                            throw new RuntimeException("Tests failed: ${failed} test(s) failed")
+                        } else {
+                            println "All tests passed"
+                        }
+                    </source>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 </project>
