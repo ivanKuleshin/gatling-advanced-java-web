@@ -58,6 +58,13 @@
                 <groupId>io.gatling</groupId>
                 <artifactId>gatling-maven-plugin</artifactId>
                 <version>${gatling-maven-plugin.version}</version>
+                <configuration>
+                    <simulationClass>acetoys.AceToysMainSimulation</simulationClass>
+                    <jvmArgs>
+                        <jvmArg>--add-opens</jvmArg>
+                        <jvmArg>java.base/java.lang=ALL-UNNAMED</jvmArg>
+                    </jvmArgs>
+                </configuration>
             </plugin>
         </plugins>
     </build>
