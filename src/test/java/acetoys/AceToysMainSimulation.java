@@ -17,6 +17,7 @@ import io.gatling.javaapi.http.HttpProtocolBuilder;
 
 import static io.gatling.javaapi.core.CoreDsl.AllowList;
 import static io.gatling.javaapi.core.CoreDsl.DenyList;
+import static io.gatling.javaapi.core.CoreDsl.global;
 import static io.gatling.javaapi.core.CoreDsl.scenario;
 import static io.gatling.javaapi.http.HttpDsl.http;
 
@@ -104,7 +105,9 @@ public class AceToysMainSimulation extends Simulation {
      */
     public AceToysMainSimulation() {
         switch (TEST_TYPE) {
-            case "INSTANT_USERS" -> setUp(OpenPopulations.instantUsersPopulation).protocols(httpProtocol);
+            case "INSTANT_USERS" -> setUp(OpenPopulations.instantUsersPopulation).protocols(httpProtocol)
+                    // less than 800ms
+                    .assertions(global().responseTime().max().lt(800));
             case "RAMP_USERS" -> setUp(OpenPopulations.rampUsersPopulation).protocols(httpProtocol);
             case "COMPLEX_SCENARIO" -> setUp(OpenPopulations.usersPerSecondPopulation).protocols(httpProtocol);
             case "CLOSED_MODEL" -> setUp(ClosedPopulations.constantUsersPopulation).protocols(httpProtocol);
